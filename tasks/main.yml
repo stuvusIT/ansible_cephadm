@@ -1,0 +1,32 @@
+---
+- name: Add Ceph apt key
+  apt_key:
+    url: https://download.ceph.com/keys/release.gpg
+
+- name: Add Ceph apt repository
+  apt_repository:
+    repo: deb https://download.ceph.com/{{ ansible_distribution | lower }}-{{ cephadm_release_name | mandatory }}/ {{ ansible_distribution_release }} main
+    filename: ceph
+  register: cephadm_apt_repo_task_ceph
+
+- name: Add docker apt key
+  apt_key:
+    url: https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg
+
+- name: Add docker apt repository
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable
+    filename: docker
+  register: cephadm_apt_repo_task_docker
+
+- name: apt update
+  apt:
+    update_cache: yes
+  when: cephadm_apt_repo_task_ceph.changed or cephadm_apt_repo_task_docker.changed
+
+- name: Install required packages
+  apt:
+    name:
+      - cephadm
+      - docker-ce
+      - docker-ce-cli
