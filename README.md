@@ -1,6 +1,6 @@
 # ansible_cephadm
 
-This role installs [cephadm](https://docs.ceph.com/en/quincy/cephadm/) and Docker on Debian.
+This role installs [cephadm](https://docs.ceph.com/en/latest/cephadm/) and Docker on Debian.
 That is, the packages `cephadm`, `docker-ce` and `docker-ce-cli` will be installed.
 
 ## Requirements
