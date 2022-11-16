@@ -16,7 +16,6 @@ galaxy_info:
   galaxy_tags:
     - ceph
     - cephadm
-    - docker
     - storage
     - distributed
     - filesystem

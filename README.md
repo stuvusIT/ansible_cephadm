@@ -1,6 +1,6 @@
 # ansible_cephadm
 
-This role installs [cephadm](https://docs.ceph.com/en/latest/cephadm/) and Docker on Debian.
+This role installs [cephadm](https://docs.ceph.com/en/latest/cephadm/) on Debian.
 
 ## Requirements
 
@@ -9,9 +9,9 @@ Maybe this role also works on other apt based systems.
 
 ## Role Variables
 
-| Name                   | Required | Description                                                                                                                                          |
-| :--------------------- | :------- | :--------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `cephadm_release_name` | yes      | Release name for `cephadm add-repo --release`, e.g. `quincy`. For possible release names, see: <https://docs.ceph.com/en/quincy/releases/index.html> |
+| Name                   | Required | Description                                                                                                                                |
+| :--------------------- | :------- | :----------------------------------------------------------------------------------------------------------------------------------------- |
+| `cephadm_release_name` | yes      | Release name for `cephadm add-repo --release`, e.g. `quincy`. For possible release names, see: <https://docs.ceph.com/en/latest/releases/> |
 
 ## Example Playbook
 
