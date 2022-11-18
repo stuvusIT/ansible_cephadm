@@ -1,0 +1,21 @@
+---
+- name: Add Ceph apt key
+  apt_key:
+    url: https://download.ceph.com/keys/release.gpg
+
+- name: Add Ceph apt repository
+  apt_repository:
+    repo: deb https://download.ceph.com/{{ ansible_distribution | lower }}-{{ cephadm_release_name | mandatory }}/ {{ ansible_distribution_release }} main
+    filename: ceph
+  register: cephadm_apt_repo_task
+
+- name: apt update
+  apt:
+    update_cache: yes
+  when: cephadm_apt_repo_task.changed
+
+- name: Install required packages
+  apt:
+    name:
+      - cephadm
+      - ceph-common
