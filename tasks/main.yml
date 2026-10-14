@@ -1,18 +1,36 @@
 ---
-- name: Add Ceph apt key
+- name: Remove legacy Ceph apt repository
+  file:
+    path: /etc/apt/sources.list.d/ceph.list
+    state: absent
+  register: cephadm_legacy_repo_task
+
+- name: Check for apt-key
+  stat:
+    path: /usr/bin/apt-key
+  register: cephadm_apt_key_stat
+
+- name: Remove legacy Ceph apt key
   apt_key:
-    url: https://download.ceph.com/keys/release.gpg
+    id: 08B73419AC32B4E966C1A330E84AC2C0460F3994
+    state: absent
+  when: cephadm_apt_key_stat.stat.exists
 
 - name: Add Ceph apt repository
-  apt_repository:
-    repo: deb https://download.ceph.com/{{ ansible_distribution | lower }}-{{ cephadm_release_name | mandatory }}/ {{ ansible_distribution_release }} main
-    filename: ceph
+  deb822_repository:
+    name: ceph
+    types: deb
+    uris: https://download.ceph.com/{{ ansible_facts['distribution'] | lower }}-{{ cephadm_release_name | mandatory }}/
+    suites: "{{ ansible_facts['distribution_release'] }}"
+    components: main
+    signed_by: https://download.ceph.com/keys/release.gpg
+    install_python_debian: True
   register: cephadm_apt_repo_task
 
 - name: apt update
   apt:
     update_cache: yes
-  when: cephadm_apt_repo_task.changed
+  when: cephadm_apt_repo_task.changed or cephadm_legacy_repo_task.changed
 
 - name: Install required packages
   apt:
